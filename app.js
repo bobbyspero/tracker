@@ -179,6 +179,40 @@ class LayoffTracker {
         const severityElement = document.getElementById('severity');
         severityElement.textContent = severity;
         severityElement.className = 'stat-value ' + (severity === 'CRITICAL' || severity === 'HIGH' ? 'critical' : '');
+
+        // Populate companies list
+        this.updateCompaniesList();
+    }
+
+    updateCompaniesList() {
+        // Aggregate layoffs by company
+        const companyMap = {};
+        this.layoffsData.forEach(item => {
+            if (companyMap[item.company]) {
+                companyMap[item.company] += item.count;
+            } else {
+                companyMap[item.company] = item.count;
+            }
+        });
+
+        // Convert to array and sort by count (descending)
+        const companiesArray = Object.entries(companyMap)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count);
+
+        // Populate the list
+        const companiesList = document.getElementById('companies-list');
+        companiesList.innerHTML = '';
+
+        companiesArray.forEach(company => {
+            const entry = document.createElement('div');
+            entry.className = 'company-entry';
+            entry.innerHTML = `
+                <span class="company-name">${company.name}</span>
+                <span class="company-count">${company.count.toLocaleString()}</span>
+            `;
+            companiesList.appendChild(entry);
+        });
     }
 
     startTicker() {

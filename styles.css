@@ -140,7 +140,7 @@ body {
 .ticker {
     display: inline-block;
     white-space: nowrap;
-    animation: scroll-left 60s linear infinite;
+    animation: scroll-left 120s linear infinite;
     font-size: 24px;
     padding-left: 100%;
 }
@@ -201,6 +201,59 @@ body {
 @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.6; }
+}
+
+/* Companies List */
+.companies-header {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    border-top: 2px solid var(--terminal-green-dim);
+    padding-top: 15px;
+}
+
+.companies-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--terminal-green-dim);
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.company-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 5px;
+    font-size: 16px;
+    border-bottom: 1px dotted var(--terminal-green-dim);
+}
+
+.company-entry:last-child {
+    border-bottom: none;
+}
+
+.company-name {
+    color: var(--terminal-green);
+}
+
+.company-count {
+    color: var(--terminal-green-dim);
+    font-weight: bold;
+}
+
+/* Custom scrollbar for companies list */
+.companies-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.companies-list::-webkit-scrollbar-track {
+    background: var(--terminal-bg-light);
+}
+
+.companies-list::-webkit-scrollbar-thumb {
+    background: var(--terminal-green);
+    border: 1px solid var(--terminal-bg);
 }
 
 /* Map Container */
