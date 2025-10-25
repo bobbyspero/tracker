@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TECH LAYOFFS TRACKER v1.0</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+</head>
+<body>
+    <div class="crt">
+        <div class="scanline"></div>
+        <div class="container">
+            <!-- Header -->
+            <header class="terminal-header">
+                <div class="ascii-art">
+╔══════════════════════════════════════════════════════════════════════╗
+║  ████████╗███████╗ ██████╗██╗  ██╗    ██╗      █████╗ ██╗   ██╗ ██████╗ ███████╗███████╗███████╗
+║  ╚══██╔══╝██╔════╝██╔════╝██║  ██║    ██║     ██╔══██╗╚██╗ ██╔╝██╔═══██╗██╔════╝██╔════╝██╔════╝
+║     ██║   █████╗  ██║     ███████║    ██║     ███████║ ╚████╔╝ ██║   ██║█████╗  █████╗  ███████╗
+║     ██║   ██╔══╝  ██║     ██╔══██║    ██║     ██╔══██║  ╚██╔╝  ██║   ██║██╔══╝  ██╔══╝  ╚════██║
+║     ██║   ███████╗╚██████╗██║  ██║    ███████╗██║  ██║   ██║   ╚██████╔╝██║     ██║     ███████║
+║     ╚═╝   ╚══════╝ ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝     ╚══════╝
+║                      TRACKER v1.0 - MONITORING THE TECH INDUSTRY
+╚══════════════════════════════════════════════════════════════════════╝
+                </div>
+                <div class="system-info">
+                    <span id="current-date"></span> | CONNECTED | <span id="data-count">0</span> EVENTS LOGGED
+                </div>
+            </header>
+
+            <!-- Ticker -->
+            <div class="ticker-container">
+                <div class="ticker-label">[ LATEST UPDATES ]</div>
+                <div class="ticker-wrapper">
+                    <div class="ticker" id="ticker"></div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <!-- Statistics Panel -->
+                <div class="stats-panel">
+                    <h2>╔═══ STATISTICS ═══╗</h2>
+                    <div class="stat-item">
+                        <span class="stat-label">TOTAL LAYOFFS:</span>
+                        <span class="stat-value" id="total-layoffs">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">COMPANIES:</span>
+                        <span class="stat-value" id="total-companies">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">LOCATIONS:</span>
+                        <span class="stat-value" id="total-locations">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">LATEST EVENT:</span>
+                        <span class="stat-value" id="latest-date">N/A</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">SEVERITY INDEX:</span>
+                        <span class="stat-value critical" id="severity">HIGH</span>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="map-container">
+                    <h2>╔═══ GLOBAL HEAT MAP ═══╗</h2>
+                    <div id="map"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color low"></span> LOW IMPACT
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color medium"></span> MEDIUM IMPACT
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color high"></span> HIGH IMPACT
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Controls -->
+            <div class="timeline-container">
+                <h2>╔═══ TIMELINE ANIMATION ═══╗</h2>
+                <div class="timeline-controls">
+                    <button id="play-btn" class="control-btn">▶ PLAY</button>
+                    <button id="pause-btn" class="control-btn" disabled>⏸ PAUSE</button>
+                    <button id="reset-btn" class="control-btn">⏮ RESET</button>
+                    <div class="speed-control">
+                        <label>SPEED:</label>
+                        <select id="speed-select">
+                            <option value="2000">0.5x</option>
+                            <option value="1000" selected>1x</option>
+                            <option value="500">2x</option>
+                            <option value="250">4x</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="timeline-slider">
+                    <input type="range" id="timeline-range" min="0" max="100" value="0">
+                    <div class="timeline-date" id="timeline-date">READY</div>
+                </div>
+                <div class="timeline-progress">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </div>
+
+            <!-- Recent Events Log -->
+            <div class="events-log">
+                <h2>╔═══ RECENT EVENTS LOG ═══╗</h2>
+                <div class="log-content" id="log-content">
+                    <div class="log-entry">SYSTEM READY. WAITING FOR DATA...</div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="terminal-footer">
+                <div class="footer-content">
+                    ╚══════════════════════════════════════════════════════════════════════╝
+                    <br>
+                    [ DATA UPDATES EVERY 24H ] | [ SOURCE: PUBLIC RECORDS ] | [ STATUS: <span class="status-indicator">ACTIVE</span> ]
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

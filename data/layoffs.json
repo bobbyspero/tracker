@@ -1,0 +1,314 @@
+[
+  {
+    "company": "Meta",
+    "date": "2023-11-15",
+    "count": 10000,
+    "location": "Menlo Park, CA",
+    "lat": 37.4529,
+    "lng": -122.1817
+  },
+  {
+    "company": "Amazon",
+    "date": "2023-11-20",
+    "count": 18000,
+    "location": "Seattle, WA",
+    "lat": 47.6062,
+    "lng": -122.3321
+  },
+  {
+    "company": "Salesforce",
+    "date": "2023-12-01",
+    "count": 8000,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Twitter",
+    "date": "2023-12-10",
+    "count": 3700,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Stripe",
+    "date": "2023-12-15",
+    "count": 1000,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Google",
+    "date": "2024-01-10",
+    "count": 12000,
+    "location": "Mountain View, CA",
+    "lat": 37.386,
+    "lng": -122.0838
+  },
+  {
+    "company": "Microsoft",
+    "date": "2024-01-15",
+    "count": 10000,
+    "location": "Redmond, WA",
+    "lat": 47.6740,
+    "lng": -122.1215
+  },
+  {
+    "company": "Spotify",
+    "date": "2024-01-20",
+    "count": 600,
+    "location": "Stockholm, Sweden",
+    "lat": 59.3293,
+    "lng": 18.0686
+  },
+  {
+    "company": "Dell",
+    "date": "2024-02-01",
+    "count": 6650,
+    "location": "Round Rock, TX",
+    "lat": 30.5083,
+    "lng": -97.6789
+  },
+  {
+    "company": "IBM",
+    "date": "2024-02-05",
+    "count": 3900,
+    "location": "Armonk, NY",
+    "lat": 41.1196,
+    "lng": -73.7198
+  },
+  {
+    "company": "PayPal",
+    "date": "2024-02-15",
+    "count": 2500,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "SAP",
+    "date": "2024-02-20",
+    "count": 3000,
+    "location": "Walldorf, Germany",
+    "lat": 49.2978,
+    "lng": 8.6442
+  },
+  {
+    "company": "Twilio",
+    "date": "2024-03-01",
+    "count": 1400,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Snap",
+    "date": "2024-03-10",
+    "count": 1200,
+    "location": "Santa Monica, CA",
+    "lat": 34.0195,
+    "lng": -118.4912
+  },
+  {
+    "company": "Shopify",
+    "date": "2024-03-15",
+    "count": 1000,
+    "location": "Ottawa, Canada",
+    "lat": 45.4215,
+    "lng": -75.6972
+  },
+  {
+    "company": "Zoom",
+    "date": "2024-03-20",
+    "count": 1300,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "DocuSign",
+    "date": "2024-04-01",
+    "count": 700,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Lyft",
+    "date": "2024-04-10",
+    "count": 1072,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "DoorDash",
+    "date": "2024-04-20",
+    "count": 1250,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Cisco",
+    "date": "2024-05-01",
+    "count": 4000,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "eBay",
+    "date": "2024-05-10",
+    "count": 1000,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "Unity",
+    "date": "2024-05-15",
+    "count": 1800,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Okta",
+    "date": "2024-06-01",
+    "count": 400,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Intel",
+    "date": "2024-06-15",
+    "count": 15000,
+    "location": "Santa Clara, CA",
+    "lat": 37.3541,
+    "lng": -121.9552
+  },
+  {
+    "company": "Oracle",
+    "date": "2024-07-01",
+    "count": 2000,
+    "location": "Austin, TX",
+    "lat": 30.2672,
+    "lng": -97.7431
+  },
+  {
+    "company": "Tesla",
+    "date": "2024-07-10",
+    "count": 3500,
+    "location": "Austin, TX",
+    "lat": 30.2672,
+    "lng": -97.7431
+  },
+  {
+    "company": "Qualcomm",
+    "date": "2024-07-20",
+    "count": 1258,
+    "location": "San Diego, CA",
+    "lat": 32.7157,
+    "lng": -117.1611
+  },
+  {
+    "company": "Nokia",
+    "date": "2024-08-01",
+    "count": 1400,
+    "location": "Espoo, Finland",
+    "lat": 60.2055,
+    "lng": 24.6559
+  },
+  {
+    "company": "Ericsson",
+    "date": "2024-08-05",
+    "count": 1200,
+    "location": "Stockholm, Sweden",
+    "lat": 59.3293,
+    "lng": 18.0686
+  },
+  {
+    "company": "Adobe",
+    "date": "2024-08-15",
+    "count": 750,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "ServiceNow",
+    "date": "2024-09-01",
+    "count": 500,
+    "location": "Santa Clara, CA",
+    "lat": 37.3541,
+    "lng": -121.9552
+  },
+  {
+    "company": "Block (Square)",
+    "date": "2024-09-10",
+    "count": 1000,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Coinbase",
+    "date": "2024-09-15",
+    "count": 950,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Robinhood",
+    "date": "2024-09-20",
+    "count": 780,
+    "location": "Menlo Park, CA",
+    "lat": 37.4529,
+    "lng": -122.1817
+  },
+  {
+    "company": "Peloton",
+    "date": "2024-10-01",
+    "count": 2800,
+    "location": "New York, NY",
+    "lat": 40.7128,
+    "lng": -74.0060
+  },
+  {
+    "company": "Dropbox",
+    "date": "2024-10-10",
+    "count": 528,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Atlassian",
+    "date": "2024-10-15",
+    "count": 500,
+    "location": "Sydney, Australia",
+    "lat": -33.8688,
+    "lng": 151.2093
+  },
+  {
+    "company": "HP",
+    "date": "2024-10-20",
+    "count": 6000,
+    "location": "Palo Alto, CA",
+    "lat": 37.4419,
+    "lng": -122.1430
+  },
+  {
+    "company": "Workday",
+    "date": "2024-10-25",
+    "count": 525,
+    "location": "Pleasanton, CA",
+    "lat": 37.6624,
+    "lng": -121.8747
+  }
+]
