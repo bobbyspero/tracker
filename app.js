@@ -185,33 +185,86 @@ class LayoffTracker {
     }
 
     updateCompaniesList() {
-        // Aggregate layoffs by company
+        // Build detailed company map with all events
         const companyMap = {};
         this.layoffsData.forEach(item => {
-            if (companyMap[item.company]) {
-                companyMap[item.company] += item.count;
-            } else {
-                companyMap[item.company] = item.count;
+            if (!companyMap[item.company]) {
+                companyMap[item.company] = {
+                    total: 0,
+                    events: []
+                };
             }
+            companyMap[item.company].total += item.count;
+            companyMap[item.company].events.push({
+                date: item.date,
+                count: item.count,
+                location: item.location
+            });
         });
 
-        // Convert to array and sort by count (descending)
+        // Convert to array and sort by total count (descending)
         const companiesArray = Object.entries(companyMap)
-            .map(([name, count]) => ({ name, count }))
-            .sort((a, b) => b.count - a.count);
+            .map(([name, data]) => ({ name, total: data.total, events: data.events }))
+            .sort((a, b) => b.total - a.total);
 
         // Populate the list
         const companiesList = document.getElementById('companies-list');
         companiesList.innerHTML = '';
 
         companiesArray.forEach(company => {
+            // Create company container
+            const container = document.createElement('div');
+            container.className = 'company-container';
+
+            // Create main entry (clickable)
             const entry = document.createElement('div');
             entry.className = 'company-entry';
             entry.innerHTML = `
-                <span class="company-name">${company.name}</span>
-                <span class="company-count">${company.count.toLocaleString()}</span>
+                <span class="company-name">
+                    <span class="expand-icon">▶</span> ${company.name}
+                </span>
+                <span class="company-count">${company.total.toLocaleString()}</span>
             `;
-            companiesList.appendChild(entry);
+
+            // Create details section (hidden by default)
+            const details = document.createElement('div');
+            details.className = 'company-details';
+            details.style.display = 'none';
+
+            // Sort events by date
+            company.events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // Add each event
+            company.events.forEach(event => {
+                const eventEntry = document.createElement('div');
+                eventEntry.className = 'event-entry';
+                eventEntry.innerHTML = `
+                    <span class="event-date">${event.date}</span>
+                    <span class="event-count">${event.count.toLocaleString()}</span>
+                `;
+                details.appendChild(eventEntry);
+            });
+
+            // Add click handler to toggle details
+            entry.addEventListener('click', () => {
+                const icon = entry.querySelector('.expand-icon');
+                if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    icon.textContent = '▼';
+                    entry.classList.add('expanded');
+                } else {
+                    details.style.display = 'none';
+                    icon.textContent = '▶';
+                    entry.classList.remove('expanded');
+                }
+            });
+
+            // Add hover effect
+            entry.style.cursor = 'pointer';
+
+            container.appendChild(entry);
+            container.appendChild(details);
+            companiesList.appendChild(container);
         });
     }
 
