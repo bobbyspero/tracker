@@ -121,13 +121,38 @@ body {
     overflow: hidden;
 }
 
-.ticker-label {
+.ticker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: var(--terminal-green);
     color: var(--terminal-bg);
+}
+
+.ticker-label {
     padding: 5px 10px;
     font-size: 18px;
     font-weight: bold;
-    text-align: center;
+}
+
+.ticker-speed-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.ticker-speed-control select {
+    background-color: var(--terminal-bg);
+    color: var(--terminal-green);
+    border: 1px solid var(--terminal-bg);
+    padding: 4px 8px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .ticker-wrapper {

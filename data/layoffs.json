@@ -310,5 +310,269 @@
     "location": "Pleasanton, CA",
     "lat": 37.6624,
     "lng": -121.8747
+  },
+  {
+    "company": "ByteDance",
+    "date": "2024-11-05",
+    "count": 2200,
+    "location": "Beijing, China",
+    "lat": 39.9042,
+    "lng": 116.4074
+  },
+  {
+    "company": "Twitch",
+    "date": "2024-11-15",
+    "count": 500,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Reddit",
+    "date": "2024-11-20",
+    "count": 200,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Spotify",
+    "date": "2024-12-01",
+    "count": 1500,
+    "location": "Stockholm, Sweden",
+    "lat": 59.3293,
+    "lng": 18.0686
+  },
+  {
+    "company": "Epic Games",
+    "date": "2024-12-10",
+    "count": 830,
+    "location": "Cary, NC",
+    "lat": 35.7915,
+    "lng": -78.7811
+  },
+  {
+    "company": "Cisco",
+    "date": "2024-12-15",
+    "count": 5000,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "TikTok",
+    "date": "2025-01-08",
+    "count": 3000,
+    "location": "Los Angeles, CA",
+    "lat": 34.0522,
+    "lng": -118.2437
+  },
+  {
+    "company": "Google",
+    "date": "2025-01-15",
+    "count": 8500,
+    "location": "Mountain View, CA",
+    "lat": 37.386,
+    "lng": -122.0838
+  },
+  {
+    "company": "Microsoft",
+    "date": "2025-01-22",
+    "count": 6200,
+    "location": "Redmond, WA",
+    "lat": 47.6740,
+    "lng": -122.1215
+  },
+  {
+    "company": "Amazon",
+    "date": "2025-02-01",
+    "count": 12000,
+    "location": "Seattle, WA",
+    "lat": 47.6062,
+    "lng": -122.3321
+  },
+  {
+    "company": "Salesforce",
+    "date": "2025-02-10",
+    "count": 4500,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Meta",
+    "date": "2025-02-20",
+    "count": 7000,
+    "location": "Menlo Park, CA",
+    "lat": 37.4529,
+    "lng": -122.1817
+  },
+  {
+    "company": "LinkedIn",
+    "date": "2025-03-05",
+    "count": 1800,
+    "location": "Sunnyvale, CA",
+    "lat": 37.3688,
+    "lng": -122.0363
+  },
+  {
+    "company": "Netflix",
+    "date": "2025-03-12",
+    "count": 450,
+    "location": "Los Gatos, CA",
+    "lat": 37.2358,
+    "lng": -121.9623
+  },
+  {
+    "company": "Uber",
+    "date": "2025-03-20",
+    "count": 2100,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Apple",
+    "date": "2025-04-01",
+    "count": 3200,
+    "location": "Cupertino, CA",
+    "lat": 37.3230,
+    "lng": -122.0322
+  },
+  {
+    "company": "SAP",
+    "date": "2025-04-15",
+    "count": 2500,
+    "location": "Walldorf, Germany",
+    "lat": 49.2978,
+    "lng": 8.6442
+  },
+  {
+    "company": "IBM",
+    "date": "2025-04-22",
+    "count": 3000,
+    "location": "Armonk, NY",
+    "lat": 41.1196,
+    "lng": -73.7198
+  },
+  {
+    "company": "Dell",
+    "date": "2025-05-05",
+    "count": 5500,
+    "location": "Round Rock, TX",
+    "lat": 30.5083,
+    "lng": -97.6789
+  },
+  {
+    "company": "Intel",
+    "date": "2025-05-15",
+    "count": 10000,
+    "location": "Santa Clara, CA",
+    "lat": 37.3541,
+    "lng": -121.9552
+  },
+  {
+    "company": "Snap",
+    "date": "2025-05-28",
+    "count": 900,
+    "location": "Santa Monica, CA",
+    "lat": 34.0195,
+    "lng": -118.4912
+  },
+  {
+    "company": "Twitter/X",
+    "date": "2025-06-10",
+    "count": 1500,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "Tesla",
+    "date": "2025-06-20",
+    "count": 4200,
+    "location": "Austin, TX",
+    "lat": 30.2672,
+    "lng": -97.7431
+  },
+  {
+    "company": "Zoom",
+    "date": "2025-07-01",
+    "count": 1100,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "Oracle",
+    "date": "2025-07-15",
+    "count": 2800,
+    "location": "Austin, TX",
+    "lat": 30.2672,
+    "lng": -97.7431
+  },
+  {
+    "company": "Palantir",
+    "date": "2025-07-25",
+    "count": 350,
+    "location": "Denver, CO",
+    "lat": 39.7392,
+    "lng": -104.9903
+  },
+  {
+    "company": "Nvidia",
+    "date": "2025-08-05",
+    "count": 1200,
+    "location": "Santa Clara, CA",
+    "lat": 37.3541,
+    "lng": -121.9552
+  },
+  {
+    "company": "Adobe",
+    "date": "2025-08-18",
+    "count": 600,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "Shopify",
+    "date": "2025-09-01",
+    "count": 800,
+    "location": "Ottawa, Canada",
+    "lat": 45.4215,
+    "lng": -75.6972
+  },
+  {
+    "company": "PayPal",
+    "date": "2025-09-15",
+    "count": 1600,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
+  },
+  {
+    "company": "Lyft",
+    "date": "2025-09-28",
+    "count": 750,
+    "location": "San Francisco, CA",
+    "lat": 37.7749,
+    "lng": -122.4194
+  },
+  {
+    "company": "AMD",
+    "date": "2025-10-08",
+    "count": 1400,
+    "location": "Santa Clara, CA",
+    "lat": 37.3541,
+    "lng": -121.9552
+  },
+  {
+    "company": "Roku",
+    "date": "2025-10-18",
+    "count": 360,
+    "location": "San Jose, CA",
+    "lat": 37.3382,
+    "lng": -121.8863
   }
 ]

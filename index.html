@@ -33,7 +33,18 @@
 
             <!-- Ticker -->
             <div class="ticker-container">
-                <div class="ticker-label">[ LATEST UPDATES ]</div>
+                <div class="ticker-header">
+                    <div class="ticker-label">[ LATEST UPDATES ]</div>
+                    <div class="ticker-speed-control">
+                        SPEED:
+                        <select id="ticker-speed-select">
+                            <option value="180">SLOW</option>
+                            <option value="120" selected>NORMAL</option>
+                            <option value="60">FAST</option>
+                            <option value="30">VERY FAST</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="ticker-wrapper">
                     <div class="ticker" id="ticker"></div>
                 </div>

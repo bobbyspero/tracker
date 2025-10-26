@@ -252,6 +252,13 @@ class LayoffTracker {
             }
         });
 
+        // Ticker speed select
+        document.getElementById('ticker-speed-select').addEventListener('change', (e) => {
+            const ticker = document.getElementById('ticker');
+            const speed = e.target.value + 's';
+            ticker.style.animationDuration = speed;
+        });
+
         // Timeline slider
         const timelineRange = document.getElementById('timeline-range');
         timelineRange.max = this.layoffsData.length - 1;
