@@ -79,80 +79,200 @@ class LayoffTracker {
     }
 
     initMap() {
-        // Initialize Leaflet map
-        this.map = L.map('map', {
-            center: [37.0902, -95.7129], // Center of USA
-            zoom: 4,
-            zoomControl: true,
-            minZoom: 2,
-            maxZoom: 10
+        // Initialize Three.js scene
+        const container = document.getElementById('globe-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        // Create scene
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0x000000);
+
+        // Create camera
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        this.camera.position.z = 300;
+
+        // Create renderer
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer.setSize(width, height);
+        container.appendChild(this.renderer.domElement);
+
+        // Create globe
+        const globeGeometry = new THREE.SphereGeometry(100, 64, 64);
+
+        // Create wireframe material with terminal green color
+        const globeMaterial = new THREE.MeshBasicMaterial({
+            color: 0x003300,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
         });
 
-        // Add dark tile layer for terminal aesthetic
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-            subdomains: 'abcd',
-            maxZoom: 20
-        }).addTo(this.map);
+        this.globe = new THREE.Mesh(globeGeometry, globeMaterial);
+        this.scene.add(this.globe);
+
+        // Add subtle green glow around globe
+        const glowGeometry = new THREE.SphereGeometry(101, 64, 64);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.05,
+            side: THREE.BackSide
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        this.scene.add(glow);
+
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0x00ff00, 0.5);
+        this.scene.add(ambientLight);
+
+        // Store markers group
+        this.markersGroup = new THREE.Group();
+        this.scene.add(this.markersGroup);
+
+        // Mouse controls
+        this.isDragging = false;
+        this.previousMousePosition = { x: 0, y: 0 };
+        this.rotation = { x: 0, y: 0 };
+
+        this.renderer.domElement.addEventListener('mousedown', (e) => {
+            this.isDragging = true;
+            this.previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        this.renderer.domElement.addEventListener('mousemove', (e) => {
+            if (this.isDragging) {
+                const deltaX = e.clientX - this.previousMousePosition.x;
+                const deltaY = e.clientY - this.previousMousePosition.y;
+
+                this.rotation.y += deltaX * 0.005;
+                this.rotation.x += deltaY * 0.005;
+
+                // Limit vertical rotation
+                this.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.rotation.x));
+
+                this.previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+        });
+
+        this.renderer.domElement.addEventListener('mouseup', () => {
+            this.isDragging = false;
+        });
+
+        this.renderer.domElement.addEventListener('mouseleave', () => {
+            this.isDragging = false;
+        });
+
+        // Zoom with mouse wheel
+        this.renderer.domElement.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const delta = e.deltaY * 0.1;
+            this.camera.position.z = Math.max(150, Math.min(500, this.camera.position.z + delta));
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        });
 
         // Initialize with all data showing
         this.updateHeatMap(this.layoffsData);
 
-        this.addLog('MAP INITIALIZED');
+        // Start animation loop
+        this.animate();
+
+        this.addLog('3D GLOBE INITIALIZED');
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        // Apply rotation
+        this.globe.rotation.x = this.rotation.x;
+        this.globe.rotation.y = this.rotation.y;
+        this.markersGroup.rotation.x = this.rotation.x;
+        this.markersGroup.rotation.y = this.rotation.y;
+
+        // Auto-rotate slowly when not dragging
+        if (!this.isDragging) {
+            this.rotation.y += 0.001;
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    // Convert lat/lng to 3D coordinates on sphere
+    latLngToVector3(lat, lng, radius) {
+        const phi = (90 - lat) * (Math.PI / 180);
+        const theta = (lng + 180) * (Math.PI / 180);
+
+        const x = -(radius * Math.sin(phi) * Math.cos(theta));
+        const z = (radius * Math.sin(phi) * Math.sin(theta));
+        const y = (radius * Math.cos(phi));
+
+        return new THREE.Vector3(x, y, z);
     }
 
     updateHeatMap(dataSlice) {
-        // Remove existing heat layer
-        if (this.heatLayer) {
-            this.map.removeLayer(this.heatLayer);
+        // Clear existing markers
+        while (this.markersGroup.children.length > 0) {
+            this.markersGroup.remove(this.markersGroup.children[0]);
         }
 
-        // Remove existing markers
-        this.markers.forEach(marker => this.map.removeLayer(marker));
-        this.markers = [];
-
-        // Prepare heat data: [lat, lng, intensity]
-        const heatData = dataSlice.map(item => {
-            // Normalize intensity based on layoff count (0-1 scale)
-            const intensity = Math.min(item.count / 5000, 2);
-            return [item.lat, item.lng, intensity];
-        });
-
-        // Add heat layer
-        this.heatLayer = L.heatLayer(heatData, {
-            radius: 30,
-            blur: 40,
-            maxZoom: 10,
-            max: 1.0,
-            gradient: {
-                0.0: '#00ff00',
-                0.4: '#ffff00',
-                0.7: '#ff8800',
-                1.0: '#ff0000'
-            }
-        }).addTo(this.map);
-
-        // Add markers with popups
+        // Add new markers
         dataSlice.forEach(item => {
-            const marker = L.circleMarker([item.lat, item.lng], {
-                radius: 5,
-                fillColor: '#00ff00',
-                color: '#00ff00',
-                weight: 1,
-                opacity: 0.8,
-                fillOpacity: 0.4
-            }).addTo(this.map);
+            // Determine color and size based on layoff count
+            let color, size;
+            if (item.count >= 10000) {
+                color = 0xff0000; // Red for high impact
+                size = 3;
+            } else if (item.count >= 3000) {
+                color = 0xffff00; // Yellow for medium impact
+                size = 2;
+            } else {
+                color = 0x00ff00; // Green for low impact
+                size = 1.5;
+            }
 
-            marker.bindPopup(`
-                <div style="font-family: 'VT323', monospace;">
-                    <strong>${item.company}</strong><br>
-                    DATE: ${item.date}<br>
-                    LAYOFFS: ${item.count.toLocaleString()}<br>
-                    LOCATION: ${item.location}
-                </div>
-            `);
+            // Create marker geometry
+            const markerGeometry = new THREE.SphereGeometry(size, 16, 16);
+            const markerMaterial = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.8
+            });
 
-            this.markers.push(marker);
+            const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+
+            // Position marker on globe surface
+            const position = this.latLngToVector3(item.lat, item.lng, 100);
+            marker.position.copy(position);
+
+            // Add glow effect
+            const glowGeometry = new THREE.SphereGeometry(size + 0.5, 16, 16);
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.BackSide
+            });
+            const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+            glow.position.copy(position);
+
+            // Store data for potential tooltips/interaction
+            marker.userData = {
+                company: item.company,
+                date: item.date,
+                count: item.count,
+                location: item.location
+            };
+
+            this.markersGroup.add(marker);
+            this.markersGroup.add(glow);
         });
     }
 

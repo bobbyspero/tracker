@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TECH LAYOFFS TRACKER v1.0</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
     <div class="crt">
@@ -83,19 +81,22 @@
                     </div>
                 </div>
 
-                <!-- Map Container -->
+                <!-- Globe Container -->
                 <div class="map-container">
-                    <h2>╔═══ GLOBAL HEAT MAP ═══╗</h2>
-                    <div id="map"></div>
+                    <h2>╔═══ 3D GLOBAL HEAT MAP ═══╗</h2>
+                    <div id="globe-container"></div>
+                    <div class="globe-controls">
+                        <div class="control-hint">[ DRAG TO ROTATE | SCROLL TO ZOOM ]</div>
+                    </div>
                     <div class="map-legend">
                         <div class="legend-item">
-                            <span class="legend-color low"></span> LOW IMPACT
+                            <span class="legend-color low"></span> LOW IMPACT (1-3K)
                         </div>
                         <div class="legend-item">
-                            <span class="legend-color medium"></span> MEDIUM IMPACT
+                            <span class="legend-color medium"></span> MEDIUM IMPACT (3-10K)
                         </div>
                         <div class="legend-item">
-                            <span class="legend-color high"></span> HIGH IMPACT
+                            <span class="legend-color high"></span> HIGH IMPACT (10K+)
                         </div>
                     </div>
                 </div>
