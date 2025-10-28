@@ -136,37 +136,65 @@ class LayoffTracker {
         this.markersGroup = new THREE.Group();
         this.scene.add(this.markersGroup);
 
+        // Raycaster for click detection
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
         // Mouse controls
         this.isDragging = false;
         this.previousMousePosition = { x: 0, y: 0 };
         this.rotation = { x: 0, y: 0 };
+        this.velocity = { x: 0, y: 0 };
+        this.dragStartTime = 0;
+        this.lastDragTime = 0;
 
         this.renderer.domElement.addEventListener('mousedown', (e) => {
             this.isDragging = true;
+            this.dragStartTime = Date.now();
+            this.lastDragTime = Date.now();
+            this.velocity = { x: 0, y: 0 };
             this.previousMousePosition = { x: e.clientX, y: e.clientY };
         });
 
         this.renderer.domElement.addEventListener('mousemove', (e) => {
             if (this.isDragging) {
+                const currentTime = Date.now();
+                const deltaTime = currentTime - this.lastDragTime;
+
                 const deltaX = e.clientX - this.previousMousePosition.x;
                 const deltaY = e.clientY - this.previousMousePosition.y;
 
                 this.rotation.y += deltaX * 0.005;
                 this.rotation.x += deltaY * 0.005;
 
+                // Calculate velocity for momentum
+                if (deltaTime > 0) {
+                    this.velocity.x = deltaY * 0.005 / (deltaTime / 16);
+                    this.velocity.y = deltaX * 0.005 / (deltaTime / 16);
+                }
+
                 // Limit vertical rotation
                 this.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.rotation.x));
 
                 this.previousMousePosition = { x: e.clientX, y: e.clientY };
+                this.lastDragTime = currentTime;
             }
         });
 
-        this.renderer.domElement.addEventListener('mouseup', () => {
+        this.renderer.domElement.addEventListener('mouseup', (e) => {
+            const clickDuration = Date.now() - this.dragStartTime;
+
+            // If it was a quick click (not a drag), check for marker clicks
+            if (clickDuration < 200 && Math.abs(this.velocity.x) < 0.01 && Math.abs(this.velocity.y) < 0.01) {
+                this.checkMarkerClick(e);
+            }
+
             this.isDragging = false;
         });
 
         this.renderer.domElement.addEventListener('mouseleave', () => {
             this.isDragging = false;
+            this.velocity = { x: 0, y: 0 };
         });
 
         // Zoom with mouse wheel
@@ -197,18 +225,100 @@ class LayoffTracker {
     animate() {
         requestAnimationFrame(() => this.animate());
 
+        // Apply momentum when not dragging
+        if (!this.isDragging) {
+            // Apply velocity to rotation
+            this.rotation.x += this.velocity.x;
+            this.rotation.y += this.velocity.y;
+
+            // Apply damping (friction) to velocity
+            this.velocity.x *= 0.95;
+            this.velocity.y *= 0.95;
+
+            // Stop velocity when it gets very small
+            if (Math.abs(this.velocity.x) < 0.0001) this.velocity.x = 0;
+            if (Math.abs(this.velocity.y) < 0.0001) this.velocity.y = 0;
+
+            // Limit vertical rotation
+            this.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.rotation.x));
+        }
+
         // Apply rotation
         this.globe.rotation.x = this.rotation.x;
         this.globe.rotation.y = this.rotation.y;
         this.markersGroup.rotation.x = this.rotation.x;
         this.markersGroup.rotation.y = this.rotation.y;
 
-        // Auto-rotate slowly when not dragging
-        if (!this.isDragging) {
-            this.rotation.y += 0.001;
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    checkMarkerClick(event) {
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+
+        // Check for intersections with markers
+        const intersects = this.raycaster.intersectObjects(this.markersGroup.children, true);
+
+        if (intersects.length > 0) {
+            const clickedMarker = intersects[0].object;
+            if (clickedMarker.userData && clickedMarker.userData.company) {
+                this.showMarkerInfo(clickedMarker.userData, event);
+            }
+        }
+    }
+
+    showMarkerInfo(data, event) {
+        // Remove existing tooltip
+        const existingTooltip = document.getElementById('marker-tooltip');
+        if (existingTooltip) {
+            existingTooltip.remove();
         }
 
-        this.renderer.render(this.scene, this.camera);
+        // Create tooltip
+        const tooltip = document.createElement('div');
+        tooltip.id = 'marker-tooltip';
+        tooltip.className = 'marker-tooltip';
+        tooltip.innerHTML = `
+            <div class="tooltip-header">${data.company}</div>
+            <div class="tooltip-row">
+                <span class="tooltip-label">DATE:</span>
+                <span class="tooltip-value">${data.date}</span>
+            </div>
+            <div class="tooltip-row">
+                <span class="tooltip-label">LAYOFFS:</span>
+                <span class="tooltip-value">${data.count.toLocaleString()}</span>
+            </div>
+            <div class="tooltip-row">
+                <span class="tooltip-label">LOCATION:</span>
+                <span class="tooltip-value">${data.location}</span>
+            </div>
+            <div class="tooltip-close">[CLICK TO CLOSE]</div>
+        `;
+
+        document.body.appendChild(tooltip);
+
+        // Position tooltip near the globe
+        const globeContainer = document.getElementById('globe-container');
+        const rect = globeContainer.getBoundingClientRect();
+        tooltip.style.left = (rect.left + rect.width / 2 - 150) + 'px';
+        tooltip.style.top = (rect.top + 20) + 'px';
+
+        // Close on click
+        tooltip.addEventListener('click', () => {
+            tooltip.remove();
+        });
+
+        // Auto-close after 10 seconds
+        setTimeout(() => {
+            if (document.getElementById('marker-tooltip')) {
+                tooltip.remove();
+            }
+        }, 10000);
+
+        this.addLog(`MARKER CLICKED: ${data.company} - ${data.count.toLocaleString()} layoffs`);
     }
 
     // Convert lat/lng to 3D coordinates on sphere
