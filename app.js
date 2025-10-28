@@ -122,6 +122,12 @@ class LayoffTracker {
         const glow = new THREE.Mesh(glowGeometry, glowMaterial);
         this.scene.add(glow);
 
+        // Add latitude/longitude grid lines
+        this.addGraticule();
+
+        // Add continent outlines
+        this.addContinents();
+
         // Add ambient light
         const ambientLight = new THREE.AmbientLight(0x00ff00, 0.5);
         this.scene.add(ambientLight);
@@ -215,6 +221,110 @@ class LayoffTracker {
         const y = (radius * Math.cos(phi));
 
         return new THREE.Vector3(x, y, z);
+    }
+
+    addGraticule() {
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.2
+        });
+
+        // Add latitude lines
+        for (let lat = -75; lat <= 75; lat += 15) {
+            const points = [];
+            for (let lng = -180; lng <= 180; lng += 5) {
+                points.push(this.latLngToVector3(lat, lng, 100.5));
+            }
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(geometry, lineMaterial);
+            this.globe.add(line);
+        }
+
+        // Add longitude lines
+        for (let lng = -180; lng < 180; lng += 15) {
+            const points = [];
+            for (let lat = -90; lat <= 90; lat += 5) {
+                points.push(this.latLngToVector3(lat, lng, 100.5));
+            }
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.Line(geometry, lineMaterial);
+            this.globe.add(line);
+        }
+
+        // Add equator (brighter)
+        const equatorMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.4
+        });
+        const equatorPoints = [];
+        for (let lng = -180; lng <= 180; lng += 2) {
+            equatorPoints.push(this.latLngToVector3(0, lng, 100.5));
+        }
+        const equatorGeometry = new THREE.BufferGeometry().setFromPoints(equatorPoints);
+        const equator = new THREE.Line(equatorGeometry, equatorMaterial);
+        this.globe.add(equator);
+    }
+
+    addContinents() {
+        const continentMaterial = new THREE.LineBasicMaterial({
+            color: 0x00ff00,
+            transparent: true,
+            opacity: 0.6,
+            linewidth: 2
+        });
+
+        // Simplified continent outlines (major coastlines)
+        const continents = {
+            // North America
+            northAmerica: [
+                [70, -150], [60, -140], [50, -130], [40, -125], [35, -120],
+                [32, -117], [30, -110], [25, -100], [25, -95], [30, -90],
+                [35, -80], [40, -75], [45, -70], [50, -60], [55, -65],
+                [60, -70], [65, -80], [70, -90], [70, -100], [70, -120], [70, -150]
+            ],
+            // South America
+            southAmerica: [
+                [10, -80], [5, -75], [0, -70], [-5, -70], [-10, -75],
+                [-20, -70], [-30, -70], [-40, -65], [-50, -70], [-55, -68],
+                [-55, -65], [-45, -60], [-35, -55], [-25, -50], [-15, -45],
+                [-5, -45], [0, -50], [5, -55], [10, -65], [10, -80]
+            ],
+            // Europe
+            europe: [
+                [70, 20], [65, 15], [60, 10], [55, 5], [50, 0], [45, 5],
+                [40, 10], [35, 10], [35, 20], [40, 30], [45, 35], [50, 30],
+                [55, 25], [60, 30], [65, 35], [70, 30], [70, 20]
+            ],
+            // Africa
+            africa: [
+                [35, 10], [30, 15], [25, 20], [20, 30], [10, 40], [0, 40],
+                [-10, 40], [-20, 35], [-30, 30], [-35, 25], [-35, 20],
+                [-30, 15], [-20, 15], [-10, 15], [0, 20], [10, 25],
+                [20, 25], [30, 20], [35, 15], [35, 10]
+            ],
+            // Asia
+            asia: [
+                [70, 60], [70, 80], [70, 100], [65, 120], [60, 130], [50, 140],
+                [40, 140], [35, 135], [30, 120], [25, 100], [25, 90], [30, 80],
+                [35, 70], [40, 60], [45, 55], [50, 50], [55, 55], [60, 60], [70, 60]
+            ],
+            // Australia
+            australia: [
+                [-10, 115], [-15, 120], [-25, 130], [-35, 140], [-40, 145],
+                [-40, 150], [-35, 150], [-25, 150], [-15, 145], [-10, 135],
+                [-10, 125], [-10, 115]
+            ]
+        };
+
+        // Draw each continent
+        Object.values(continents).forEach(coords => {
+            const points = coords.map(([lat, lng]) => this.latLngToVector3(lat, lng, 100.8));
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const line = new THREE.LineLoop(geometry, continentMaterial);
+            this.globe.add(line);
+        });
     }
 
     updateHeatMap(dataSlice) {
