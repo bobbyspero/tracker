@@ -352,6 +352,10 @@ body {
     background-color: #000000;
     position: relative;
     overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 #globe-container canvas {
@@ -620,8 +624,9 @@ body {
         font-size: 6px;
     }
 
-    #map {
+    #globe-container {
         height: 300px;
+        touch-action: none;
     }
 
     .timeline-controls {
@@ -637,6 +642,28 @@ body {
     .map-legend {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .control-hint {
+        font-size: 12px;
+    }
+
+    .marker-tooltip {
+        width: 90%;
+        min-width: auto;
+        left: 5% !important;
+        top: 10px !important;
+        max-width: 350px;
+    }
+
+    .ticker-header {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .ticker-speed-control {
+        width: 100%;
+        justify-content: center;
     }
 }
 

@@ -213,6 +213,92 @@ class LayoffTracker {
             this.renderer.setSize(width, height);
         });
 
+        // Touch controls for mobile
+        this.touchStartDistance = 0;
+        this.touchStartZoom = 0;
+
+        this.renderer.domElement.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+
+            if (e.touches.length === 1) {
+                // Single touch - rotation
+                this.isDragging = true;
+                this.dragStartTime = Date.now();
+                this.lastDragTime = Date.now();
+                this.velocity = { x: 0, y: 0 };
+                this.previousMousePosition = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+            } else if (e.touches.length === 2) {
+                // Two finger pinch - zoom
+                this.isDragging = false;
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                this.touchStartDistance = Math.sqrt(dx * dx + dy * dy);
+                this.touchStartZoom = this.camera.position.z;
+            }
+        }, { passive: false });
+
+        this.renderer.domElement.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+
+            if (e.touches.length === 1 && this.isDragging) {
+                // Single touch rotation
+                const currentTime = Date.now();
+                const deltaTime = currentTime - this.lastDragTime;
+
+                const deltaX = e.touches[0].clientX - this.previousMousePosition.x;
+                const deltaY = e.touches[0].clientY - this.previousMousePosition.y;
+
+                this.rotation.y += deltaX * 0.005;
+                this.rotation.x += deltaY * 0.005;
+
+                // Calculate velocity for momentum
+                if (deltaTime > 0) {
+                    this.velocity.x = deltaY * 0.005 / (deltaTime / 16);
+                    this.velocity.y = deltaX * 0.005 / (deltaTime / 16);
+                }
+
+                // Limit vertical rotation
+                this.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.rotation.x));
+
+                this.previousMousePosition = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+                this.lastDragTime = currentTime;
+            } else if (e.touches.length === 2) {
+                // Pinch to zoom
+                const dx = e.touches[0].clientX - e.touches[1].clientX;
+                const dy = e.touches[0].clientY - e.touches[1].clientY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                const scale = this.touchStartDistance / distance;
+                const newZoom = this.touchStartZoom * scale;
+                this.camera.position.z = Math.max(150, Math.min(500, newZoom));
+            }
+        }, { passive: false });
+
+        this.renderer.domElement.addEventListener('touchend', (e) => {
+            e.preventDefault();
+
+            const touchDuration = Date.now() - this.dragStartTime;
+
+            // If it was a quick tap (not a drag), check for marker taps
+            if (e.changedTouches.length === 1 && touchDuration < 200 &&
+                Math.abs(this.velocity.x) < 0.01 && Math.abs(this.velocity.y) < 0.01) {
+                this.checkMarkerClick(e.changedTouches[0]);
+            }
+
+            this.isDragging = false;
+
+            // Reset if no touches left
+            if (e.touches.length === 0) {
+                this.touchStartDistance = 0;
+            }
+        }, { passive: false });
+
         // Initialize with all data showing
         this.updateHeatMap(this.layoffsData);
 
